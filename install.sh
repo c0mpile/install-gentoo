@@ -288,6 +288,7 @@ setup_encryption_and_fs() {
 
     log "Formatting Btrfs..."
     mkfs.btrfs -L gentoo /dev/mapper/cryptroot
+    mkdir -p /mnt/gentoo
     mount /dev/mapper/cryptroot /mnt/gentoo
 
     log "Creating Btrfs subvolumes..."
@@ -341,6 +342,7 @@ mount_filesystems() {
         cryptsetup open "$PART2" cryptroot || true
         
         log "Mounting Root..."
+        mkdir -p /mnt/gentoo
         mount -o noatime,compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt/gentoo
     fi
     
