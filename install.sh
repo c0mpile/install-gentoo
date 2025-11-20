@@ -89,12 +89,6 @@ is_step_done() {
     return 1
 }
 
-# --- Safety Checks ---
-    if [ ! -d /sys/firmware/efi ]; then
-        error "System is not booted in UEFI mode. This script requires UEFI."
-    fi
-}
-
 install_dependencies() {
     if ! command -v dialog &> /dev/null; then
         log "dialog not found. Checking for package manager..."
@@ -195,7 +189,6 @@ interactive_setup() {
             break
         else
             dialog --msgbox "Passwords do not match or are empty. Try again." 6 40
-        fi
         fi
     done
 
