@@ -127,7 +127,7 @@ interactive_setup() {
 
     # Timezone
     log "Loading timezones..."
-    find /usr/share/zoneinfo -type f -not -path '*/posix/*' -not -path '*/right/*' | sed 's|/usr/share/zoneinfo/||' | sort > /tmp/zones.txt
+    find /usr/share/zoneinfo -type f -not -path '*/posix/*' -not -path '*/right/*' | sed 's|/usr/share/zoneinfo/||' | grep -v "\.tab$" | grep -v "\.list$" | grep -v "^leapseconds$" | grep -v "^posixrules$" | grep -v "^tzdata.zi$" | sort > /tmp/zones.txt
     local menu_args=()
     while read -r zone; do
         menu_args+=("$zone" "")
