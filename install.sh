@@ -225,7 +225,7 @@ interactive_setup() {
     rm "$locale_list"
 
     # Gaming Options Selection
-    dialog --yesno "Do you want to set up Gaming Options?\n\nThis will install Steam, Wine, Lutris, Gamemode, MangoHud and configure necessary 32-bit libraries." 10 60
+    dialog --yesno "Do you want to set up Gaming Options?\n\nThis will install Steam, Wine, Lutris, Gamemode, MangoHud and configure necessary 32-bit libraries." 10 60 || true
     if [[ $? -eq 0 ]]; then
         SETUP_GAMING="yes"
     else
@@ -233,7 +233,7 @@ interactive_setup() {
     fi
 
     # Secure Boot Selection
-    dialog --yesno "Do you want to set up Secure Boot with custom keys (sbctl)?\n\nNote: Your system must be in Setup Mode for this to work automatically." 10 60
+    dialog --yesno "Do you want to set up Secure Boot with custom keys (sbctl)?\n\nNote: Your system must be in Setup Mode for this to work automatically." 10 60 || true
     if [[ $? -eq 0 ]]; then
         SETUP_SECUREBOOT="yes"
     else
@@ -368,8 +368,9 @@ mount_filesystems() {
 install_stage3() {
     log "Finding latest stage3 tarball..."
     # Fetch the latest stage3 path from the latest-stage3.txt file
-    local latest_txt_url="${STAGE3_URL_BASE}/latest-stage3-amd64-systemd-desktop.txt"
-    local stage3_path=$(curl -s "$latest_txt_url" | grep -v "^#" | cut -d" " -f1)
+    # Note: The file contains PGP signatures and comments, we need to filter them out
+    local latest_txt_url="${STAGE3_URL_BASE}/latest-stage3-amd64-desktop-systemd.txt"
+    local stage3_path=$(curl -s "$latest_txt_url" | grep -v "^#" | grep -v "^-" | grep -v "^Hash:" | grep -v "^iQ" | grep -v "^=" | grep ".tar.xz" | head -n1 | cut -d" " -f1)
     local stage3_url="${STAGE3_URL_BASE}/${stage3_path}"
     
     if [[ -z "$stage3_path" ]]; then
