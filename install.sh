@@ -544,7 +544,9 @@ enter_chroot() {
     mount --make-slave /mnt/gentoo/run
 
     log "Copying script to chroot..."
-    cp "${BASH_SOURCE[0]}" /mnt/gentoo/install.sh
+    # Get absolute path to the script since we may have changed directories
+    local script_path=$(readlink -f "${BASH_SOURCE[0]}")
+    cp "$script_path" /mnt/gentoo/install.sh
     chmod +x /mnt/gentoo/install.sh
 
     # Pass credentials securely via a file
