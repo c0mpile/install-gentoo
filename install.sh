@@ -89,9 +89,6 @@ is_step_done() {
     return 1
 }
 
-# --- Safety Checks ---
-
-
 install_dependencies() {
     if ! command -v dialog &> /dev/null; then
         log "dialog not found. Checking for package manager..."
