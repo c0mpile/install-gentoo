@@ -583,6 +583,11 @@ EOF
 }
 
 install_kernel_bootloader() {
+    log "Initializing Portage GPG..."
+    # Create the GPG directory for Portage to avoid signature verification errors
+    mkdir -p /etc/portage/gnupg
+    chmod 700 /etc/portage/gnupg
+    
     log "Syncing Portage (Initial webrsync)..."
     emerge-webrsync
     
