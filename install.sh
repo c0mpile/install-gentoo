@@ -25,7 +25,7 @@ SETUP_SECUREBOOT="no"
 # Gaming Options
 SETUP_GAMING="no"
 # PROFILE will be determined dynamically
-STAGE3_URL_BASE="https://autobuilds.gentoo.org/releases/amd64/autobuilds"
+STAGE3_URL_BASE="https://distfiles.gentoo.org/releases/amd64/autobuilds"
 # We will dynamically find the latest stage3 later
 
 # State and Config Files
@@ -367,13 +367,14 @@ mount_filesystems() {
 # --- Stage3 Installation ---
 install_stage3() {
     log "Finding latest stage3 tarball..."
-    # Fetch the latest stage3 path from the latest-stage3.txt file
+    # Fetch the latest stage3 filename from the current-stage3 directory
     # Note: The file contains PGP signatures and comments, we need to filter them out
-    local latest_txt_url="${STAGE3_URL_BASE}/latest-stage3-amd64-desktop-systemd.txt"
-    local stage3_path=$(curl -s "$latest_txt_url" | grep -v "^#" | grep -v "^-" | grep -v "^Hash:" | grep -v "^iQ" | grep -v "^=" | grep ".tar.xz" | head -n1 | cut -d" " -f1)
-    local stage3_url="${STAGE3_URL_BASE}/${stage3_path}"
+    local current_stage3_dir="${STAGE3_URL_BASE}/current-stage3-amd64-desktop-systemd"
+    local latest_txt_url="${current_stage3_dir}/latest-stage3-amd64-desktop-systemd.txt"
+    local stage3_filename=$(curl -s "$latest_txt_url" | grep -v "^#" | grep -v "^-" | grep -v "^Hash:" | grep -v "^iQ" | grep -v "^=" | grep ".tar.xz" | head -n1 | cut -d" " -f1)
+    local stage3_url="${current_stage3_dir}/${stage3_filename}"
     
-    if [[ -z "$stage3_path" ]]; then
+    if [[ -z "$stage3_filename" ]]; then
         error "Could not find latest stage3 tarball from $latest_txt_url"
     fi
 
